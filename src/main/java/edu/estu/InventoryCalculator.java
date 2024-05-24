@@ -44,6 +44,7 @@ public class InventoryCalculator {
         double previousReorderPoint;
         double currentReorderPoint = initialReorderPoint;
 
+        // Iteratively calculate optimal order quantity and reorder point
         do {
             initialOrderQuantity = calculateNewOrderQuantity(orderingCost, annualDemand, holdingCost, penaltyCost, calculateDemandDuringLeadTime(leadTimeStandardDeviation, initialOrderQuantity, holdingCost, annualDemand, penaltyCost));
             double newReorderPoint = calculateInitialReorderPoint(leadTimeDemand, leadTimeStandardDeviation, initialOrderQuantity, holdingCost, annualDemand, penaltyCost);

@@ -8,7 +8,7 @@ public class InventoryManagementApp {
         ZChartLoader zChartLoader = new ZChartLoader();
         InventoryCalculator calculator = new InventoryCalculator(zChartLoader);
 
-        // Test problem
+        // Test problem data
         double unitCost = 20; // C
         double orderingCost = 100; // K
         double penaltyCost = 20; // p
@@ -17,14 +17,23 @@ public class InventoryManagementApp {
         double leadTimeDemand = 500;
         double leadTimeStandardDeviation = 100;
 
-        double holdingCost = calculator.calculateHoldingCost(unitCost, interestRate); // h
-        double annualDemand = calculator.calculateAnnualDemand(leadTime, leadTimeDemand); // lambda
-        double orderQuantity = calculator.calculateInitialOrderQuantity(orderingCost, annualDemand, holdingCost); // Q
-        double reorderPoint = calculator.calculateInitialReorderPoint(leadTimeDemand, leadTimeStandardDeviation, orderQuantity, holdingCost, annualDemand, penaltyCost); // R
+        // Calculate holding cost and annual demand
+        double holdingCost = calculator.calculateHoldingCost(unitCost, interestRate);
+        double annualDemand = calculator.calculateAnnualDemand(leadTime, leadTimeDemand);
+
+        // Calculate initial order quantity and reorder point
+        double orderQuantity = calculator.calculateInitialOrderQuantity(orderingCost, annualDemand, holdingCost);
+        double reorderPoint = calculator.calculateInitialReorderPoint(leadTimeDemand, leadTimeStandardDeviation, orderQuantity, holdingCost, annualDemand, penaltyCost);
+
+        // Iteratively calculate optimal order quantity and reorder point
+        // until the difference between the current and previous reorder points is less than 0.01
         double[] results = calculator.calculateOptimalOrderQuantityAndReorderPoint(orderQuantity, reorderPoint, leadTimeDemand, leadTimeStandardDeviation, orderingCost, annualDemand, holdingCost, penaltyCost);
         orderQuantity = results[0];
         reorderPoint = results[1];
 
+        // Print the results
+        // Math.round is used to round the values to the nearest integer
+        // String.format is used to format the values
         System.out.println("Q, R = (" + Math.round(orderQuantity) + ", " + Math.round(reorderPoint) + ")");
         System.out.println("Safety Cost: " + Math.round(Math.round(reorderPoint) - leadTimeDemand));
 
